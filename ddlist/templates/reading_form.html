@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Reading Form</h2>
+<form method="post" id="readingForm" data-cities-url="{% url 'ajax_load_cities' %}" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+    <a href="{% url 'reading_changelist' %}">Nevermind</a>
+</form>
+<div id="readingList" data-readings-url="{% url 'ajax_load_readings' %}">
+
+</div>
+
+<script>
+    $("#id_country").change(function() {
+        var url = $("#readingForm").attr("data-cities-url");
+        console.log("URL:" + url);
+        var countryId = $(this).val();  // get the selected country ID from the HTML input
+        console.log("countryId:" + countryId);
+        $.ajax({
+            url: url,
+            data: {
+                'country': countryId // add the country id to the GET parameters
+            },
+            success: function(data) { // `data` is the return of the `load_cities` view function
+                $("#id_city").html(data); // replace the contents of the city input with the data that came from the server
+            }
+        });
+    });
+    $("#id_city").change(function() {
+        var url = $("#readingList").attr("data-readings-url");
+        console.log("URL:" + url);
+        var cityId = $(this).val();  // get the selected country ID from the HTML input
+        console.log("cityId:" + cityId);
+        $.ajax({
+            url: url,
+            data: {
+                'city': cityId // add the country id to the GET parameters
+            },
+            success: function(data) { // `data` is the return of the `load_cities` view function
+                $("#readingList").empty();
+                $("#readingList").append(data); // replace the contents of the city input with the data that came from the server
+            }
+        });
+    });
+</script>
+{% endblock content %}
