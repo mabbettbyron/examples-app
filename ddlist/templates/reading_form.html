@@ -13,18 +13,13 @@
 </div>
 
 <script>
-    $("#previousSite").click(function() {
-        console.log("In Previous Site");
-        var url = $("#readingList").attr("data-readings-url");
-        console.log("URL:" + url);
-        var cityId = $("#id_city option:selected").prev().val();
-        console.log("cityId:" + cityId);
-        $("#id_city").val(cityId);
-        if (cityId) {
+    /******************* start loadReadingList ********************************/
+    function loadReadingList(city, url) {
+        if (city) {
             $.ajax({
                 url: url,
                 data: {
-                    'city': cityId // add the country id to the GET parameters
+                    'city': city // add the country id to the GET parameters
                 },
                 success: function(data) { // `data` is the return of the `load_cities` view function
                     $("#readingList").empty();
@@ -35,6 +30,17 @@
         else {
             $("#readingList").empty();
         }
+    }
+    /********************* end loadReadingList ********************************/
+
+    $("#previousSite").click(function() {
+        console.log("In Previous Site");
+        var url = $("#readingList").attr("data-readings-url");
+        console.log("URL:" + url);
+        var cityId = $("#id_city option:selected").prev().val();
+        console.log("cityId:" + cityId);
+        $("#id_city").val(cityId);
+        loadReadingList(cityId, url);
     });
     $("#id_country").change(function() {
         var url = $("#readingForm").attr("data-cities-url");
@@ -57,16 +63,7 @@
         console.log("URL:" + url);
         var cityId = $(this).val();  // get the selected country ID from the HTML input
         console.log("cityId:" + cityId);
-        $.ajax({
-            url: url,
-            data: {
-                'city': cityId // add the country id to the GET parameters
-            },
-            success: function(data) { // `data` is the return of the `load_cities` view function
-                $("#readingList").empty();
-                $("#readingList").append(data); // replace the contents of the city input with the data that came from the server
-            }
-        });
+        loadReadingList(cityId, url);
     });
     $("#nextSite").click(function() {
         console.log("In Next Site");
@@ -75,21 +72,7 @@
         var cityId = $("#id_city option:selected").next().val();
         console.log("cityId:" + cityId);
         $("#id_city").val(cityId);
-        if (cityId) {
-            $.ajax({
-                url: url,
-                data: {
-                    'city': cityId // add the country id to the GET parameters
-                },
-                success: function(data) { // `data` is the return of the `load_cities` view function
-                    $("#readingList").empty();
-                    $("#readingList").append(data); // replace the contents of the city input with the data that came from the server
-                }
-            });
-        }
-        else {
-            $("#readingList").empty();
-        }
+        loadReadingList(cityId, url);
     });
 </script>
 {% endblock content %}
