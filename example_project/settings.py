@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ddlist.apps.DdlistConfig',
+    'd3.apps.D3Config',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,5 @@
+# Python __ files
+__*/
+db.sqlite3
+Pipfile.lock
+Pipfile
